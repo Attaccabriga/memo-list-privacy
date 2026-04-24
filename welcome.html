@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email confermata — Memo List</title>
+    <meta name="description" content="La tua email è stata confermata. Apri Memo List per iniziare.">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .card {
+            max-width: 460px;
+            width: 100%;
+            padding: 40px 28px;
+            background: #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon {
+            font-size: 72px;
+            line-height: 1;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        p.subtitle {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-bottom: 28px;
+        }
+
+        /* Stato: mobile (default nascosto) */
+        .mobile-only {
+            display: none;
+        }
+
+        /* Stato: desktop (default nascosto, mostrato via JS se non mobile o se fallback) */
+        .desktop-content {
+            display: none;
+        }
+
+        /* Spinner durante il tentativo di deep link */
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #334155;
+            border-top-color: #22c55e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 16px 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-msg {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 12px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #16a34a;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .divider {
+            margin: 24px 0;
+            border: none;
+            border-top: 1px solid #334155;
+        }
+
+        .language-switcher {
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .language-switcher a {
+            color: #64748b;
+            text-decoration: none;
+            margin: 0 4px;
+            cursor: pointer;
+        }
+
+        .language-switcher a:hover,
+        .language-switcher a.active {
+            color: #22c55e;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .footer a {
+            color: #64748b;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Language switcher -->
+            <div class="language-switcher">
+                <a data-lang="it" class="active">Italiano</a> ·
+                <a data-lang="en">English</a> ·
+                <a data-lang="ru">Русский</a>
+            </div>
+
+            <!-- Contenuto mobile (tentativo deep link) -->
+            <div id="mobile-content" class="mobile-only">
+                <span class="icon">✅</span>
+                <h1 data-i18n="mobile_title">Email confermata!</h1>
+                <p class="subtitle" data-i18n="mobile_subtitle">
+                    Ti stiamo reindirizzando all'app...
+                </p>
+                <div class="spinner"></div>
+                <p class="loading-msg" data-i18n="mobile_loading">
+                    Apertura di Memo List in corso
+                </p>
+                <hr class="divider">
+                <p class="loading-msg" data-i18n="mobile_fallback_prompt">
+                    L'app non si apre?
+                </p>
+                <a href="miaapp://welcome?confirmed=true" class="btn btn-secondary" data-i18n="mobile_open_app">
+                    Apri Memo List
+                </a>
+            </div>
+
+            <!-- Contenuto desktop (istruzioni) -->
+            <div id="desktop-content" class="desktop-content">
+                <span class="icon">✅</span>
+                <h1 data-i18n="desktop_title">Email confermata!</h1>
+                <p class="subtitle" data-i18n="desktop_subtitle">
+                    Il tuo account Memo List è attivo.
+                </p>
+                <hr class="divider">
+                <p data-i18n="desktop_instructions" style="color: #cbd5e1; margin-bottom: 20px;">
+                    Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.
+                </p>
+                <p data-i18n="desktop_not_installed" style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
+                    Non hai ancora l'app? Scaricala da:
+                </p>
+                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">
+                    Scarica da Google Play
+                </a>
+            </div>
+
+            <div class="footer">
+                <p>Memo List — Lavoro e Casa</p>
+                <p style="margin-top: 4px;">
+                    <a href="./index.html" data-i18n="footer_privacy">Privacy Policy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Traduzioni i18n
+        const translations = {
+            it: {
+                mobile_title: "Email confermata!",
+                mobile_subtitle: "Ti stiamo reindirizzando all'app...",
+                mobile_loading: "Apertura di Memo List in corso",
+                mobile_fallback_prompt: "L'app non si apre?",
+                mobile_open_app: "Apri Memo List",
+                desktop_title: "Email confermata!",
+                desktop_subtitle: "Il tuo account Memo List è attivo.",
+                desktop_instructions: "Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.",
+                desktop_not_installed: "Non hai ancora l'app? Scaricala da:",
+                desktop_play_store: "Scarica da Google Play",
+                footer_privacy: "Privacy Policy",
+            },
+            en: {
+                mobile_title: "Email confirmed!",
+                mobile_subtitle: "Redirecting you to the app...",
+                mobile_loading: "Opening Memo List",
+                mobile_fallback_prompt: "App not opening?",
+                mobile_open_app: "Open Memo List",
+                desktop_title: "Email confirmed!",
+                desktop_subtitle: "Your Memo List account is active.",
+                desktop_instructions: "Open the <strong>Memo List</strong> app on your phone to get started.",
+                desktop_not_installed: "Don't have the app yet? Get it from:",
+                desktop_play_store: "Download on Google Play",
+                footer_privacy: "Privacy Policy",
+            },
+            ru: {
+                mobile_title: "Электронная почта подтверждена!",
+                mobile_subtitle: "Перенаправляем вас в приложение...",
+                mobile_loading: "Открываем Memo List",
+                mobile_fallback_prompt: "Приложение не открывается?",
+                mobile_open_app: "Открыть Memo List",
+                desktop_title: "Электронная почта подтверждена!",
+                desktop_subtitle: "Ваш аккаунт Memo List активен.",
+                desktop_instructions: "Откройте приложение <strong>Memo List</strong> на вашем телефоне, чтобы начать.",
+                desktop_not_installed: "У вас еще нет приложения? Скачайте его из:",
+                desktop_play_store: "Скачать в Google Play",
+                footer_privacy: "Политика конфиденциальности",
+            }
+        };
+
+        // Detect browser language (default it)
+        function detectLang() {
+            const saved = null; // non usiamo localStorage in pagina pubblica
+            const browserLang = (navigator.language || 'it').toLowerCase().split('-')[0];
+            if (translations[browserLang]) return browserLang;
+            return 'it';
+        }
+
+        function applyTranslations(lang) {
+            const dict = translations[lang];
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) el.innerHTML = dict[key];
+            });
+            // Aggiorna active sullo switcher
+            document.querySelectorAll('.language-switcher a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('data-lang') === lang);
+            });
+        }
+
+        // Language switcher
+        document.querySelectorAll('.language-switcher a').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyTranslations(a.getAttribute('data-lang'));
+            });
+        });
+
+        // Detect mobile / desktop
+        function isMobile() {
+            // iOS o Android — include iPad in mode Desktop che però invia UserAgent iPad
+            const ua = navigator.userAgent || '';
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(ua);
+        }
+
+        function showMobile() {
+            document.getElementById('mobile-content').style.display = 'block';
+            document.getElementById('desktop-content').style.display = 'none';
+        }
+
+        function showDesktop() {
+            document.getElementById('mobile-content').style.display = 'none';
+            document.getElementById('desktop-content').style.display = 'block';
+        }
+
+        // Init
+        applyTranslations(detectLang());
+
+        if (isMobile()) {
+            showMobile();
+            // Dopo 1 secondo, prova il deep link
+            setTimeout(() => {
+                // Preserva la query string (confirmed=true o already=true)
+                const queryString = window.location.search || '?confirmed=true';
+                const deepLink = 'miaapp://welcome' + queryString;
+                window.location.href = deepLink;
+            }, 1000);
+
+            // Dopo 4 secondi, se siamo ancora qui mostra fallback desktop (= app non installata)
+            setTimeout(() => {
+                if (!document.hidden) {
+                    // Non si è aperta l'app, mostra anche le istruzioni Play Store
+                    showDesktop();
+                }
+            }, 4000);
+        } else {
+            showDesktop();
+        }
+    </script>
+</body>
+</html>

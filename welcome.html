@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email confermata — Memo List</title>
-    <meta name="description" content="La tua email è stata confermata. Apri Memo List per iniziare.">
+    <title>Memo List</title>
+    <meta name="description" content="Memo List - verifica email e reset password">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -57,17 +57,8 @@
             margin-bottom: 28px;
         }
 
-        /* Stato: mobile (default nascosto) */
-        .mobile-only {
-            display: none;
-        }
+        .state { display: none; }
 
-        /* Stato: desktop (default nascosto, mostrato via JS se non mobile o se fallback) */
-        .desktop-content {
-            display: none;
-        }
-
-        /* Spinner durante il tentativo di deep link */
         .spinner {
             display: inline-block;
             width: 40px;
@@ -79,9 +70,7 @@
             margin: 16px 0;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .loading-msg {
             font-size: 14px;
@@ -104,18 +93,10 @@
             transition: background 0.2s;
         }
 
-        .btn:hover {
-            background: #16a34a;
-        }
+        .btn:hover { background: #16a34a; }
 
-        .btn-secondary {
-            background: #334155;
-            color: #e2e8f0;
-        }
-
-        .btn-secondary:hover {
-            background: #475569;
-        }
+        .btn-secondary { background: #334155; color: #e2e8f0; }
+        .btn-secondary:hover { background: #475569; }
 
         .divider {
             margin: 24px 0;
@@ -151,55 +132,83 @@
             color: #64748b;
             text-decoration: underline;
         }
+
+        .error-icon { color: #ef4444; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card">
-            <!-- Language switcher -->
             <div class="language-switcher">
                 <a data-lang="it" class="active">Italiano</a> ·
                 <a data-lang="en">English</a> ·
                 <a data-lang="ru">Русский</a>
             </div>
 
-            <!-- Contenuto mobile (tentativo deep link) -->
-            <div id="mobile-content" class="mobile-only">
+            <!-- State: SIGNUP CONFIRMED - Mobile -->
+            <div id="state-signup-mobile" class="state">
                 <span class="icon">✅</span>
-                <h1 data-i18n="mobile_title">Email confermata!</h1>
-                <p class="subtitle" data-i18n="mobile_subtitle">
-                    Ti stiamo reindirizzando all'app...
-                </p>
+                <h1 data-i18n="mobile_signup_title">Email confermata!</h1>
+                <p class="subtitle" data-i18n="mobile_redirecting">Ti stiamo reindirizzando all'app...</p>
                 <div class="spinner"></div>
-                <p class="loading-msg" data-i18n="mobile_loading">
-                    Apertura di Memo List in corso
-                </p>
+                <p class="loading-msg" data-i18n="mobile_loading">Apertura di Memo List in corso</p>
                 <hr class="divider">
-                <p class="loading-msg" data-i18n="mobile_fallback_prompt">
-                    L'app non si apre?
-                </p>
-                <a href="miaapp://welcome?confirmed=true" class="btn btn-secondary" data-i18n="mobile_open_app">
-                    Apri Memo List
-                </a>
+                <p class="loading-msg" data-i18n="mobile_fallback_prompt">L'app non si apre?</p>
+                <a id="mobile-open-link" href="miaapp://welcome?confirmed=true" class="btn btn-secondary" data-i18n="mobile_open_app">Apri Memo List</a>
             </div>
 
-            <!-- Contenuto desktop (istruzioni) -->
-            <div id="desktop-content" class="desktop-content">
+            <!-- State: SIGNUP CONFIRMED - Desktop -->
+            <div id="state-signup-desktop" class="state">
                 <span class="icon">✅</span>
-                <h1 data-i18n="desktop_title">Email confermata!</h1>
-                <p class="subtitle" data-i18n="desktop_subtitle">
-                    Il tuo account Memo List è attivo.
-                </p>
+                <h1 data-i18n="desktop_signup_title">Email confermata!</h1>
+                <p class="subtitle" data-i18n="desktop_signup_subtitle">Il tuo account Memo List è attivo.</p>
                 <hr class="divider">
-                <p data-i18n="desktop_instructions" style="color: #cbd5e1; margin-bottom: 20px;">
-                    Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.
-                </p>
-                <p data-i18n="desktop_not_installed" style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
-                    Non hai ancora l'app? Scaricala da:
-                </p>
-                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">
-                    Scarica da Google Play
-                </a>
+                <p data-i18n="desktop_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.</p>
+                <p data-i18n="desktop_not_installed" style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Non hai ancora l'app? Scaricala da:</p>
+                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">Scarica da Google Play</a>
+            </div>
+
+            <!-- State: RECOVERY - Mobile -->
+            <div id="state-recovery-mobile" class="state">
+                <span class="icon">🔑</span>
+                <h1 data-i18n="mobile_recovery_title">Reset password</h1>
+                <p class="subtitle" data-i18n="mobile_recovery_subtitle">Apertura dell'app per impostare la nuova password...</p>
+                <div class="spinner"></div>
+                <p class="loading-msg" data-i18n="mobile_loading">Apertura di Memo List in corso</p>
+                <hr class="divider">
+                <p class="loading-msg" data-i18n="mobile_fallback_prompt">L'app non si apre?</p>
+                <a id="mobile-recovery-link" href="#" class="btn btn-secondary" data-i18n="mobile_open_app">Apri Memo List</a>
+            </div>
+
+            <!-- State: RECOVERY - Desktop -->
+            <div id="state-recovery-desktop" class="state">
+                <span class="icon">🔑</span>
+                <h1 data-i18n="desktop_recovery_title">Reset password richiesto</h1>
+                <p class="subtitle" data-i18n="desktop_recovery_subtitle">Per sicurezza, il reset password funziona solo dall'app sul telefono.</p>
+                <hr class="divider">
+                <p data-i18n="desktop_recovery_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Apri questa email sul tuo <strong>telefono</strong> e clicca di nuovo il link.</p>
+                <p data-i18n="desktop_not_installed" style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Non hai ancora l'app? Scaricala da:</p>
+                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">Scarica da Google Play</a>
+            </div>
+
+            <!-- State: ERROR -->
+            <div id="state-error" class="state">
+                <span class="icon error-icon">⚠️</span>
+                <h1 data-i18n="error_title">Link non valido</h1>
+                <p class="subtitle" id="error-description" data-i18n="error_default">Il link potrebbe essere scaduto o essere già stato usato.</p>
+                <hr class="divider">
+                <p data-i18n="error_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Torna all'app e richiedi un nuovo link.</p>
+                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn btn-secondary" data-i18n="desktop_play_store">Scarica da Google Play</a>
+            </div>
+
+            <!-- State: UNKNOWN -->
+            <div id="state-unknown" class="state">
+                <span class="icon">📱</span>
+                <h1>Memo List</h1>
+                <p class="subtitle" data-i18n="unknown_subtitle">Pagina di landing per verifica email.</p>
+                <hr class="divider">
+                <p data-i18n="unknown_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Se sei arrivato qui per sbaglio, torna all'app.</p>
+                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">Scarica da Google Play</a>
             </div>
 
             <div class="footer">
@@ -212,55 +221,89 @@
     </div>
 
     <script>
-        // Traduzioni i18n
+        // ==== TRANSLATIONS ====
         const translations = {
             it: {
-                mobile_title: "Email confermata!",
-                mobile_subtitle: "Ti stiamo reindirizzando all'app...",
+                mobile_signup_title: "Email confermata!",
+                mobile_redirecting: "Ti stiamo reindirizzando all'app...",
                 mobile_loading: "Apertura di Memo List in corso",
                 mobile_fallback_prompt: "L'app non si apre?",
                 mobile_open_app: "Apri Memo List",
-                desktop_title: "Email confermata!",
-                desktop_subtitle: "Il tuo account Memo List è attivo.",
+                desktop_signup_title: "Email confermata!",
+                desktop_signup_subtitle: "Il tuo account Memo List è attivo.",
                 desktop_instructions: "Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.",
                 desktop_not_installed: "Non hai ancora l'app? Scaricala da:",
                 desktop_play_store: "Scarica da Google Play",
-                footer_privacy: "Privacy Policy",
+                mobile_recovery_title: "Reset password",
+                mobile_recovery_subtitle: "Apertura dell'app per impostare la nuova password...",
+                desktop_recovery_title: "Reset password richiesto",
+                desktop_recovery_subtitle: "Per sicurezza, il reset password funziona solo dall'app sul telefono.",
+                desktop_recovery_instructions: "Apri questa email sul tuo <strong>telefono</strong> e clicca di nuovo il link.",
+                error_title: "Link non valido",
+                error_default: "Il link potrebbe essere scaduto o essere già stato usato.",
+                error_expired: "Il link è scaduto. Richiedi un nuovo link dall'app.",
+                error_used: "Questo link è già stato utilizzato.",
+                error_instructions: "Torna all'app e richiedi un nuovo link.",
+                unknown_subtitle: "Pagina di landing per verifica email.",
+                unknown_instructions: "Se sei arrivato qui per sbaglio, torna all'app.",
+                footer_privacy: "Privacy Policy"
             },
             en: {
-                mobile_title: "Email confirmed!",
-                mobile_subtitle: "Redirecting you to the app...",
+                mobile_signup_title: "Email confirmed!",
+                mobile_redirecting: "Redirecting you to the app...",
                 mobile_loading: "Opening Memo List",
                 mobile_fallback_prompt: "App not opening?",
                 mobile_open_app: "Open Memo List",
-                desktop_title: "Email confirmed!",
-                desktop_subtitle: "Your Memo List account is active.",
+                desktop_signup_title: "Email confirmed!",
+                desktop_signup_subtitle: "Your Memo List account is active.",
                 desktop_instructions: "Open the <strong>Memo List</strong> app on your phone to get started.",
                 desktop_not_installed: "Don't have the app yet? Get it from:",
                 desktop_play_store: "Download on Google Play",
-                footer_privacy: "Privacy Policy",
+                mobile_recovery_title: "Password reset",
+                mobile_recovery_subtitle: "Opening the app to set your new password...",
+                desktop_recovery_title: "Password reset required",
+                desktop_recovery_subtitle: "For security, password reset only works from the app on your phone.",
+                desktop_recovery_instructions: "Open this email on your <strong>phone</strong> and click the link again.",
+                error_title: "Invalid link",
+                error_default: "The link may have expired or already been used.",
+                error_expired: "The link has expired. Request a new link from the app.",
+                error_used: "This link has already been used.",
+                error_instructions: "Go back to the app and request a new link.",
+                unknown_subtitle: "Email verification landing page.",
+                unknown_instructions: "If you arrived here by mistake, go back to the app.",
+                footer_privacy: "Privacy Policy"
             },
             ru: {
-                mobile_title: "Электронная почта подтверждена!",
-                mobile_subtitle: "Перенаправляем вас в приложение...",
+                mobile_signup_title: "Почта подтверждена!",
+                mobile_redirecting: "Перенаправляем вас в приложение...",
                 mobile_loading: "Открываем Memo List",
                 mobile_fallback_prompt: "Приложение не открывается?",
                 mobile_open_app: "Открыть Memo List",
-                desktop_title: "Электронная почта подтверждена!",
-                desktop_subtitle: "Ваш аккаунт Memo List активен.",
-                desktop_instructions: "Откройте приложение <strong>Memo List</strong> на вашем телефоне, чтобы начать.",
-                desktop_not_installed: "У вас еще нет приложения? Скачайте его из:",
+                desktop_signup_title: "Почта подтверждена!",
+                desktop_signup_subtitle: "Ваш аккаунт Memo List активен.",
+                desktop_instructions: "Откройте приложение <strong>Memo List</strong> на телефоне, чтобы начать.",
+                desktop_not_installed: "У вас ещё нет приложения? Скачайте его из:",
                 desktop_play_store: "Скачать в Google Play",
-                footer_privacy: "Политика конфиденциальности",
+                mobile_recovery_title: "Сброс пароля",
+                mobile_recovery_subtitle: "Открываем приложение для установки нового пароля...",
+                desktop_recovery_title: "Требуется сброс пароля",
+                desktop_recovery_subtitle: "Для безопасности сброс пароля работает только из приложения на телефоне.",
+                desktop_recovery_instructions: "Откройте это письмо на <strong>телефоне</strong> и снова нажмите на ссылку.",
+                error_title: "Недействительная ссылка",
+                error_default: "Ссылка могла истечь или уже использована.",
+                error_expired: "Срок действия ссылки истёк. Запросите новую ссылку из приложения.",
+                error_used: "Эта ссылка уже была использована.",
+                error_instructions: "Вернитесь в приложение и запросите новую ссылку.",
+                unknown_subtitle: "Страница подтверждения электронной почты.",
+                unknown_instructions: "Если вы попали сюда по ошибке, вернитесь в приложение.",
+                footer_privacy: "Политика конфиденциальности"
             }
         };
 
-        // Detect browser language (default it)
+        // ==== UTILS ====
         function detectLang() {
-            const saved = null; // non usiamo localStorage in pagina pubblica
             const browserLang = (navigator.language || 'it').toLowerCase().split('-')[0];
-            if (translations[browserLang]) return browserLang;
-            return 'it';
+            return translations[browserLang] ? browserLang : 'it';
         }
 
         function applyTranslations(lang) {
@@ -270,13 +313,45 @@
                 const key = el.getAttribute('data-i18n');
                 if (dict[key]) el.innerHTML = dict[key];
             });
-            // Aggiorna active sullo switcher
             document.querySelectorAll('.language-switcher a').forEach(a => {
                 a.classList.toggle('active', a.getAttribute('data-lang') === lang);
             });
         }
 
-        // Language switcher
+        function isMobile() {
+            const ua = navigator.userAgent || '';
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(ua);
+        }
+
+        function showState(stateId) {
+            document.querySelectorAll('.state').forEach(el => el.style.display = 'none');
+            const target = document.getElementById(stateId);
+            if (target) target.style.display = 'block';
+        }
+
+        function parseHashParams() {
+            const hash = window.location.hash.substring(1);
+            const params = {};
+            if (!hash) return params;
+            hash.split('&').forEach(pair => {
+                const [key, value] = pair.split('=');
+                if (key) params[decodeURIComponent(key)] = value ? decodeURIComponent(value) : '';
+            });
+            return params;
+        }
+
+        function parseQueryParams() {
+            const params = {};
+            const search = window.location.search.substring(1);
+            if (!search) return params;
+            search.split('&').forEach(pair => {
+                const [key, value] = pair.split('=');
+                if (key) params[decodeURIComponent(key)] = value ? decodeURIComponent(value) : '';
+            });
+            return params;
+        }
+
+        // ==== LANGUAGE SWITCHER ====
         document.querySelectorAll('.language-switcher a').forEach(a => {
             a.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -284,45 +359,64 @@
             });
         });
 
-        // Detect mobile / desktop
-        function isMobile() {
-            // iOS o Android — include iPad in mode Desktop che però invia UserAgent iPad
-            const ua = navigator.userAgent || '';
-            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(ua);
-        }
-
-        function showMobile() {
-            document.getElementById('mobile-content').style.display = 'block';
-            document.getElementById('desktop-content').style.display = 'none';
-        }
-
-        function showDesktop() {
-            document.getElementById('mobile-content').style.display = 'none';
-            document.getElementById('desktop-content').style.display = 'block';
-        }
-
-        // Init
+        // ==== MAIN ROUTING ====
         applyTranslations(detectLang());
 
-        if (isMobile()) {
-            showMobile();
-            // Dopo 1 secondo, prova il deep link
-            setTimeout(() => {
-                // Preserva la query string (confirmed=true o already=true)
-                const queryString = window.location.search || '?confirmed=true';
-                const deepLink = 'miaapp://welcome' + queryString;
-                window.location.href = deepLink;
-            }, 1000);
+        const hashParams = parseHashParams();
+        const queryParams = parseQueryParams();
+        const params = { ...queryParams, ...hashParams };
 
-            // Dopo 4 secondi, se siamo ancora qui mostra fallback desktop (= app non installata)
-            setTimeout(() => {
-                if (!document.hidden) {
-                    // Non si è aperta l'app, mostra anche le istruzioni Play Store
-                    showDesktop();
-                }
-            }, 4000);
+        const type = params.type;
+        const error = params.error || params.error_code;
+        const errorDescription = params.error_description || '';
+        const accessToken = params.access_token || '';
+        const refreshToken = params.refresh_token || '';
+
+        console.log('[welcome.html] hash:', hashParams);
+        console.log('[welcome.html] query:', queryParams);
+
+        if (error) {
+            const lang = detectLang();
+            const dict = translations[lang];
+            let errorMsg = dict.error_default;
+            const descLower = errorDescription.toLowerCase();
+            if (error === 'access_denied' || descLower.includes('expired')) {
+                errorMsg = dict.error_expired;
+            } else if (descLower.includes('already')) {
+                errorMsg = dict.error_used;
+            }
+            document.getElementById('error-description').textContent = errorMsg;
+            showState('state-error');
+
+        } else if (type === 'recovery') {
+            if (isMobile()) {
+                showState('state-recovery-mobile');
+                const deepLink = 'miaapp://reset-password?access_token=' + encodeURIComponent(accessToken) +
+                                 '&refresh_token=' + encodeURIComponent(refreshToken);
+                document.getElementById('mobile-recovery-link').href = deepLink;
+                setTimeout(() => { window.location.href = deepLink; }, 1000);
+                setTimeout(() => {
+                    if (!document.hidden) showState('state-recovery-desktop');
+                }, 4000);
+            } else {
+                showState('state-recovery-desktop');
+            }
+
+        } else if (type === 'signup' || params.confirmed === 'true') {
+            if (isMobile()) {
+                showState('state-signup-mobile');
+                const deepLink = 'miaapp://welcome?confirmed=true';
+                document.getElementById('mobile-open-link').href = deepLink;
+                setTimeout(() => { window.location.href = deepLink; }, 1000);
+                setTimeout(() => {
+                    if (!document.hidden) showState('state-signup-desktop');
+                }, 4000);
+            } else {
+                showState('state-signup-desktop');
+            }
+
         } else {
-            showDesktop();
+            showState('state-unknown');
         }
     </script>
 </body>

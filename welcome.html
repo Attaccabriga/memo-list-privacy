@@ -104,6 +104,15 @@
             border-top: 1px solid #334155;
         }
 
+        .message-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-top: 8px;
+            color: #cbd5e1;
+        }
+
         .language-switcher {
             margin-bottom: 20px;
             font-size: 13px;
@@ -163,9 +172,9 @@
                 <h1 data-i18n="desktop_signup_title">Email confermata!</h1>
                 <p class="subtitle" data-i18n="desktop_signup_subtitle">Il tuo account Memo List è attivo.</p>
                 <hr class="divider">
-                <p data-i18n="desktop_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.</p>
-                <p data-i18n="desktop_not_installed" style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Non hai ancora l'app? Scaricala da:</p>
-                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">Scarica da Google Play</a>
+                <div class="message-box">
+                    <p data-i18n="desktop_signup_instructions">📱 Vai sul telefono e accedi all'app Memo List.</p>
+                </div>
             </div>
 
             <!-- State: RECOVERY - Mobile -->
@@ -186,9 +195,9 @@
                 <h1 data-i18n="desktop_recovery_title">Reset password richiesto</h1>
                 <p class="subtitle" data-i18n="desktop_recovery_subtitle">Per sicurezza, il reset password funziona solo dall'app sul telefono.</p>
                 <hr class="divider">
-                <p data-i18n="desktop_recovery_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Apri questa email sul tuo <strong>telefono</strong> e clicca di nuovo il link.</p>
-                <p data-i18n="desktop_not_installed" style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Non hai ancora l'app? Scaricala da:</p>
-                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">Scarica da Google Play</a>
+                <div class="message-box">
+                    <p data-i18n="desktop_recovery_instructions">📱 Apri questa email sul <strong>telefono</strong> e clicca di nuovo il link.</p>
+                </div>
             </div>
 
             <!-- State: ERROR -->
@@ -197,18 +206,19 @@
                 <h1 data-i18n="error_title">Link non valido</h1>
                 <p class="subtitle" id="error-description" data-i18n="error_default">Il link potrebbe essere scaduto o essere già stato usato.</p>
                 <hr class="divider">
-                <p data-i18n="error_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Torna all'app e richiedi un nuovo link.</p>
-                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn btn-secondary" data-i18n="desktop_play_store">Scarica da Google Play</a>
+                <div class="message-box">
+                    <p data-i18n="error_instructions">📱 Apri l'app Memo List e richiedi un nuovo link.</p>
+                </div>
             </div>
 
-            <!-- State: UNKNOWN -->
+            <!-- State: UNKNOWN - unico stato con CTA Play Store (landing generica) -->
             <div id="state-unknown" class="state">
                 <span class="icon">📱</span>
                 <h1>Memo List</h1>
-                <p class="subtitle" data-i18n="unknown_subtitle">Pagina di landing per verifica email.</p>
+                <p class="subtitle" data-i18n="unknown_subtitle">App per organizzare lavoro e casa.</p>
                 <hr class="divider">
-                <p data-i18n="unknown_instructions" style="color: #cbd5e1; margin-bottom: 20px;">Se sei arrivato qui per sbaglio, torna all'app.</p>
-                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="desktop_play_store">Scarica da Google Play</a>
+                <p data-i18n="unknown_description" style="color: #cbd5e1; margin-bottom: 20px;">To-do, appuntamenti, scadenze, note, liste spesa e ricettario in un'unica app.</p>
+                <a href="https://play.google.com/store/apps/details?id=com.attaccabriga.lavoroecasa" class="btn" data-i18n="unknown_play_store">Scarica da Google Play</a>
             </div>
 
             <div class="footer">
@@ -231,21 +241,20 @@
                 mobile_open_app: "Apri Memo List",
                 desktop_signup_title: "Email confermata!",
                 desktop_signup_subtitle: "Il tuo account Memo List è attivo.",
-                desktop_instructions: "Apri l'app <strong>Memo List</strong> sul tuo telefono per iniziare.",
-                desktop_not_installed: "Non hai ancora l'app? Scaricala da:",
-                desktop_play_store: "Scarica da Google Play",
+                desktop_signup_instructions: "📱 Vai sul telefono e accedi all'app Memo List.",
                 mobile_recovery_title: "Reset password",
                 mobile_recovery_subtitle: "Apertura dell'app per impostare la nuova password...",
                 desktop_recovery_title: "Reset password richiesto",
                 desktop_recovery_subtitle: "Per sicurezza, il reset password funziona solo dall'app sul telefono.",
-                desktop_recovery_instructions: "Apri questa email sul tuo <strong>telefono</strong> e clicca di nuovo il link.",
+                desktop_recovery_instructions: "📱 Apri questa email sul <strong>telefono</strong> e clicca di nuovo il link.",
                 error_title: "Link non valido",
                 error_default: "Il link potrebbe essere scaduto o essere già stato usato.",
                 error_expired: "Il link è scaduto. Richiedi un nuovo link dall'app.",
                 error_used: "Questo link è già stato utilizzato.",
-                error_instructions: "Torna all'app e richiedi un nuovo link.",
-                unknown_subtitle: "Pagina di landing per verifica email.",
-                unknown_instructions: "Se sei arrivato qui per sbaglio, torna all'app.",
+                error_instructions: "📱 Apri l'app Memo List e richiedi un nuovo link.",
+                unknown_subtitle: "App per organizzare lavoro e casa.",
+                unknown_description: "To-do, appuntamenti, scadenze, note, liste spesa e ricettario in un'unica app.",
+                unknown_play_store: "Scarica da Google Play",
                 footer_privacy: "Privacy Policy"
             },
             en: {
@@ -256,21 +265,20 @@
                 mobile_open_app: "Open Memo List",
                 desktop_signup_title: "Email confirmed!",
                 desktop_signup_subtitle: "Your Memo List account is active.",
-                desktop_instructions: "Open the <strong>Memo List</strong> app on your phone to get started.",
-                desktop_not_installed: "Don't have the app yet? Get it from:",
-                desktop_play_store: "Download on Google Play",
+                desktop_signup_instructions: "📱 Go to your phone and sign in to the Memo List app.",
                 mobile_recovery_title: "Password reset",
                 mobile_recovery_subtitle: "Opening the app to set your new password...",
                 desktop_recovery_title: "Password reset required",
                 desktop_recovery_subtitle: "For security, password reset only works from the app on your phone.",
-                desktop_recovery_instructions: "Open this email on your <strong>phone</strong> and click the link again.",
+                desktop_recovery_instructions: "📱 Open this email on your <strong>phone</strong> and click the link again.",
                 error_title: "Invalid link",
                 error_default: "The link may have expired or already been used.",
                 error_expired: "The link has expired. Request a new link from the app.",
                 error_used: "This link has already been used.",
-                error_instructions: "Go back to the app and request a new link.",
-                unknown_subtitle: "Email verification landing page.",
-                unknown_instructions: "If you arrived here by mistake, go back to the app.",
+                error_instructions: "📱 Open the Memo List app and request a new link.",
+                unknown_subtitle: "Organize your work and home life.",
+                unknown_description: "To-do, appointments, deadlines, notes, shopping lists and recipes — all in one app.",
+                unknown_play_store: "Download on Google Play",
                 footer_privacy: "Privacy Policy"
             },
             ru: {
@@ -281,21 +289,20 @@
                 mobile_open_app: "Открыть Memo List",
                 desktop_signup_title: "Почта подтверждена!",
                 desktop_signup_subtitle: "Ваш аккаунт Memo List активен.",
-                desktop_instructions: "Откройте приложение <strong>Memo List</strong> на телефоне, чтобы начать.",
-                desktop_not_installed: "У вас ещё нет приложения? Скачайте его из:",
-                desktop_play_store: "Скачать в Google Play",
+                desktop_signup_instructions: "📱 Откройте приложение Memo List на телефоне и войдите.",
                 mobile_recovery_title: "Сброс пароля",
                 mobile_recovery_subtitle: "Открываем приложение для установки нового пароля...",
                 desktop_recovery_title: "Требуется сброс пароля",
                 desktop_recovery_subtitle: "Для безопасности сброс пароля работает только из приложения на телефоне.",
-                desktop_recovery_instructions: "Откройте это письмо на <strong>телефоне</strong> и снова нажмите на ссылку.",
+                desktop_recovery_instructions: "📱 Откройте это письмо на <strong>телефоне</strong> и снова нажмите на ссылку.",
                 error_title: "Недействительная ссылка",
                 error_default: "Ссылка могла истечь или уже использована.",
                 error_expired: "Срок действия ссылки истёк. Запросите новую ссылку из приложения.",
                 error_used: "Эта ссылка уже была использована.",
-                error_instructions: "Вернитесь в приложение и запросите новую ссылку.",
-                unknown_subtitle: "Страница подтверждения электронной почты.",
-                unknown_instructions: "Если вы попали сюда по ошибке, вернитесь в приложение.",
+                error_instructions: "📱 Откройте приложение Memo List и запросите новую ссылку.",
+                unknown_subtitle: "Приложение для организации работы и дома.",
+                unknown_description: "Задачи, встречи, сроки, заметки, списки покупок и рецепты — всё в одном приложении.",
+                unknown_play_store: "Скачать в Google Play",
                 footer_privacy: "Политика конфиденциальности"
             }
         };
